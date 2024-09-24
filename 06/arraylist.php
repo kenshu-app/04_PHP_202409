@@ -11,7 +11,7 @@ $fruits[2] = 'イチゴ';
 $fruits[3] = 'メロン';
 unset($fruits[1]);
 
-$arrayList['lemeon'] = 400;
+$arrayList['lemon'] = 400;
 $arrayList['apple']  = 80;
 
 echo '<pre>';
