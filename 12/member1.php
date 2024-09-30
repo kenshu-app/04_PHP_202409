@@ -3,6 +3,16 @@ class Member
 {
     public $name;
 
+    public function __construct($string)
+    {
+        echo '<p>' . $string . 'インスタンスが生成されました</p>';
+    }
+
+    public function __destruct()
+    {
+        echo '<p>' . $this->name . 'が破棄されます</p>';
+    }
+
     public function showInfo($n1, $n2, $n3)
     {
         echo '<ul>';
