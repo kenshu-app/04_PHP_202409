@@ -1,36 +1,23 @@
-<?php
+<?php declare(strict_types=1);
+require_once(dirname(__FILE__) . '/Validation.php');
 $name  = '';
 $kana  = '';
 $phone = '';
-$isValidated = false;
+$error = [
+    'name'  => '',
+    'kana'  => '',
+    'phone' => ''
+];
 
 if (!empty($_POST)) {
     $name  = $_POST['name'];
     $kana  = $_POST['kana'] ;
     $phone = $_POST['phone'];
 
-    $isValidated = true;
-
-    if ($name === '' || preg_match('/^(\s|　)+$/u', $name)) {
-        $nameError = '氏名を入力してください';
-        $isValidated = false;
-    }
-
-    if ($kana === '' || preg_match('/^(\s|　)+$/u', $kana)) {
-        $kanaError = 'フリガナを入力してください';
-        $isValidated = false;
-    } elseif (!preg_match('/^[ァ-ヶー]+$/u', $kana)) {
-        $kanaError = 'フリガナの形式が正しくありません';
-        $isValidated = false;
-    }
-
-    if ($phone === '' || preg_match('/^(\s|　)+$/u', $phone)) {
-        $phoneError = '電話番号を入力してください';
-        $isValidated = false;
-    } elseif (!preg_match('/^0\d{9,10}$/', $phone)) {
-        $phoneError = '電話番号の形式が正しくありません';
-        $isValidated = false;
-    }
+    $v = new Validation();
+    $error['name']  = $v->validName($name);
+    $error['kana']  = $v->validKana($kana);
+    $error['phone'] = $v->validPhone($phone);
 }
 /**
  * XSS対策のサニタイジングと参照名省略
@@ -81,7 +68,7 @@ function h(?string $string): ?string
 
 <body>
     <h1>ユーザ情報入力</h1>
-    <?php if ($isValidated === true):?>
+    <?php if (!isset($error['name']) || !isset($error['kana']) || !isset($error['phone'])):?>
         <table>
             <tr>
                 <th>氏名</th>
@@ -97,7 +84,7 @@ function h(?string $string): ?string
             </tr>
         </table>
         <p>入力ありがとうございました。</p>
-        <p><a href="userform.php">戻る</a></p>
+        <p><a href="noFlag.php">戻る</a></p>
     <?php else:?>
     <p>下のフォームに記入して「送信」ボタンを押してください。</p>
     <form action="" method="post" novalidate>
@@ -106,8 +93,8 @@ function h(?string $string): ?string
                 <th>氏名</th>
                 <td>
                     <input type="text" name="name" size="15" value="<?=h($name)?>">
-                    <?php if (isset($nameError)):?>
-                        <span class="error"><?=$nameError?></span>
+                    <?php if (isset($error['name'])):?>
+                        <span class="error"><?=$error['name']?></span>
                     <?php endif;?>
             </td>
             </tr>
@@ -115,8 +102,8 @@ function h(?string $string): ?string
                 <th>フリガナ</th>
                 <td>
                     <input type="text" name="kana" size="15" value="<?=h($kana)?>">
-                    <?php if (isset($kanaError)):?>
-                        <span class="error"><?=$kanaError?></span>
+                    <?php if (isset($error['kana'])):?>
+                        <span class="error"><?=$error['kana']?></span>
                     <?php endif;?>
             </td>
             </tr>
@@ -124,8 +111,8 @@ function h(?string $string): ?string
                 <th>電話番号</th>
                 <td>
                     <input type="text" name="phone" size="15" value="<?=h($phone)?>">
-                    <?php if (isset($phoneError)):?>
-                        <span class="error"><?=$phoneError?></span>
+                    <?php if (isset($error['phone'])):?>
+                        <span class="error"><?=$error['phone']?></span>
                     <?php endif;?>
             </td>
             </tr>
