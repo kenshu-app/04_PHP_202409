@@ -7,9 +7,9 @@ $transport = new Swift_SmtpTransport(
   'smtp.gmail.com', 587, 'tls'
 );
 // 差出人の認証に使用する資格情報(SMTP Credentials)を指定
-$transport->setUsername('kenshu.app@gmail.com');
+$transport->setUsername('arihito.m@gmail.com');
 // Googleのアプリパスワードを添付
-$transport->setPassword('lmrz znfn pdbq zygz');
+$transport->setPassword('vtbp fehz efvo jqwh');
 // サーバリソースを設定したメール送信のインスタンスを生成
 $mailer = new Swift_Mailer($transport);
 
@@ -17,9 +17,9 @@ $mailer = new Swift_Mailer($transport);
 $message = new Swift_Message('タイトル');
 $message->setBody('本文です');
 // メールの差出人
-$message->setFrom(['kenshu.app@gmail.com']);
+$message->setFrom(['arihito.m@gmail.com']);
 // メールの送信先
-$message->setTo(['kenshu.app@gmail.com']);
+$message->setTo(['arihito.m@gmail.com']);
 
 // メール送信(成功時1失敗時0が返る)
 echo $mailer->send($message);
